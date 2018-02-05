@@ -1,0 +1,11 @@
+root = true
+
+[*]
+indent_style = space
+end_of_line = lf
+insert_final_newline = true
+encoding = utf-8
+indent_size = 4
+
+[*.{scss,js,vue,json,yaml,yml}]
+indent_size = 2

@@ -1,0 +1,16 @@
+version: "2"
+services:
+  db:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: elm
+  app:
+    image: ranbogmord/nginx-fpm:laravel-debug
+    volumes:
+      - ".:/code"
+    ports:
+      - "8080:80"
+    
