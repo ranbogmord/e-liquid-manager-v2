@@ -66,6 +66,14 @@ body {
   #liquid-list {
     border-right: 1px solid $border-color;
 
+    .params {
+      margin-top: 20px;
+
+      select {
+        width: 100%;
+      }
+    }
+
     @media (max-width: 1024px) {
       transition: 0.3s linear left;
       left: -100%;
@@ -248,6 +256,10 @@ body {
         margin-left: 0;
       }
     }
+  }
+
+  #version-row {
+    margin-top: 20px;
   }
 
   #comments {

@@ -8,6 +8,7 @@ use App\Liquid;
 use App\Services\LiquidService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class LiquidController extends Controller
 {
@@ -28,11 +29,7 @@ class LiquidController extends Controller
      */
     public function index(Request $request)
     {
-        if (auth()->user()->role === "admin" && $request->query('include_all') === "1") {
-            return response()->json($this->liquidService->getAllLiquids());
-        } else {
-            return response()->json($this->liquidService->getUserLiquids(auth()->id()));
-        }
+        return response()->json($this->liquidService->getAllLiquids($request->query()));
     }
 
     /**
@@ -121,5 +118,52 @@ class LiquidController extends Controller
         }
 
         return response(null, 204);
+    }
+
+    /**
+     * @param Liquid $liquid
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws InternalServerErrorException
+     */
+    public function newVersion(Liquid $liquid)
+    {
+        $flavours = $liquid->flavours;
+        $newLiquid = $liquid->replicate();
+        $newLiquid->id = null;
+
+        if (preg_match('/.*V(\d+)/', $newLiquid->name, $matches)) {
+            if (!empty($matches[1])) {
+                $newVersion = intval($matches[1]) + 1;
+
+                $newLiquid->name = preg_replace('/(.*?)V(\d+)/', '\1V' . $newVersion, $newLiquid->name);
+            } else {
+                $newLiquid->name .= ' V2';
+            }
+        } else {
+            $newLiquid->name .= ' V2';
+        }
+
+        try {
+            DB::transaction(function () use ($newLiquid, $flavours, $liquid) {
+                $newLiquid->save();
+                $flavours = collect($flavours)->mapWithKeys(function ($f) {
+                    return [
+                        $f->id => [
+                            'percent' => $f->pivot->percent
+                        ]
+                    ];
+                });
+
+                $newLiquid->flavours()->sync($flavours);
+
+                $liquid->next_version_id = $newLiquid->id;
+                $liquid->save();
+            });
+        } catch (\Exception $ex) {
+            throw new InternalServerErrorException($ex->getMessage());
+        }
+
+        return response()->json($newLiquid);
     }
 }

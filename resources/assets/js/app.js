@@ -46,6 +46,10 @@ const app = new Vue({
     bus.$on('concentrate-modal:close', () => {
       this.showConcentrateModal = false;
     });
+
+    bus.$on('liquid:new-version', liquid => {
+      this.newVersion(liquid);
+    })
   },
   methods: {
     getEmptyLiquid() {
@@ -92,6 +96,7 @@ const app = new Vue({
         if (res.status === 200) {
           toastr.success("Liquid saved");
           bus.$emit('liquid:reset');
+          bus.$emit('liquid:created');
         }
       })
       .catch(err => {
@@ -118,6 +123,23 @@ const app = new Vue({
         console.log(err);
         toastr.error("Failed to archive liquid");
       });
+    },
+    newVersion(liquid) {
+      axios.post(`/ajax/liquids/${liquid.id}/new-version`)
+      .then(res => {
+        if (res.status === 200) {
+          this.liquid = _.assign(this.getEmptyLiquid(), res.data);
+          bus.$emit('liquid:created');
+        }
+      })
+      .catch(err => {
+        let res = err.response;
+        if (res.status === 400) {
+          toastr.error(utils.extractErrors(res.data));
+        } else {
+          toastr.error("Failed to create new version");
+        }
+      })
     },
     removeFlavour(idx) {
       bus.$emit('flavour:removed', idx);
@@ -157,6 +179,7 @@ const app = new Vue({
     'mix-table': require('./components/MixTable'),
     'action-row': require('./components/ActionRow'),
     'comments': require('./components/Comments'),
-    'concentrate-modal': require('./components/ConcentrateModal')
+    'concentrate-modal': require('./components/ConcentrateModal'),
+    'version-select': require('./components/VersionSelect'),
   }
 });

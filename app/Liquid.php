@@ -12,13 +12,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Liquid extends BaseModel
 {
-    /**
-     * @param Builder $query
-     * @param $id
-     */
-    public function scopeForUser($query, $id)
+    public static function boot()
     {
-        return $query->where('author_id', $id);
+        parent::boot();
+
+        static::addGlobalScope('only-latest-version', function (Builder $builder) {
+            $builder->whereNull('next_version_id');
+        });
+
+        static::addGlobalScope('for-user', function (Builder $builder) {
+            $builder->where('author_id', auth()->id());
+        });
     }
 
     /**

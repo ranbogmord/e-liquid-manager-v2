@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('liquids', 'LiquidController', [
             'only' => ['index', 'show', 'store', 'update', 'destroy']
         ]);
+        Route::post('liquids/{liquid}/new-version', 'LiquidController@newVersion');
 
         Route::get('liquids/{liquid}/comments', 'CommentController@index');
         Route::post('liquids/{liquid}/comments', 'CommentController@store');
@@ -34,6 +35,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('vendors', 'VendorController', [
             'only' => ['index', 'show']
         ]);
+    });
+
+    Route::group([
+        'namespace' => 'Admin',
+        'middleware' => 'requires-admin',
+        'prefix' => 'admin'
+    ], function () {
+        Route::name('admin.')->group(function () {
+            Route::resource('vendors', 'VendorController');
+            Route::resource('flavours', 'FlavourController');
+            Route::resource('users', 'UserController');
+        });
     });
 });
 

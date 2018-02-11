@@ -13,7 +13,9 @@ let mix = require('laravel-mix');
 
 mix.js('resources/assets/js/app.js', 'public/js')
   .js('resources/assets/js/ui.js', 'public/js')
+  .js('resources/assets/js/admin.js', 'public/js')
   .sass('resources/assets/sass/app.scss', 'public/css')
+  .sass('resources/assets/sass/admin.scss', 'public/css')
   .sass('resources/assets/sass/profile.scss', 'public/css')
   .copy('resources/assets/img/loader.svg', 'public/img')
   .sass('resources/assets/sass/base.scss', 'public/css')

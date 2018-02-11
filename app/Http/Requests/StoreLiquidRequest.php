@@ -29,7 +29,7 @@ class StoreLiquidRequest extends FormRequest
             'target_pg_percentage'  => 'required|numeric',
             'target_vg_percentage'  => 'required|numeric',
             'target_nic_strength'   => 'required|numeric',
-            'next_version_id'       => 'nullable',
+            'next_version_id'       => 'nullable|exists:liquids,id',
             'flavours'              => 'required|array',
             'flavours.*.flavour_id' => 'required|exists:flavours,id',
             'flavours.*.percent'    => 'required|numeric',

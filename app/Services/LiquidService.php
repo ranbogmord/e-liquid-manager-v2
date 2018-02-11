@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Liquid;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
 
 class LiquidService
@@ -67,8 +68,32 @@ class LiquidService
         return Liquid::where('author_id', $id)->get();
     }
 
-    public function getAllLiquids()
+    public function getAllLiquids($params = [])
     {
-        return Liquid::all();
+        if (empty($params)) {
+            return Liquid::all();
+        }
+
+        $liquids = Liquid::query();
+        if (!empty($params['sort'])) {
+            if (!empty($params['order']) && in_array(strtolower($params['order']), ['asc', 'desc'])) {
+                $order = $params['order'];
+            } else {
+                $order = "asc";
+            }
+
+            $liquids->orderBy($params['sort'], $order);
+        }
+
+        if (!empty($params['archived'])) {
+            $liquids->withoutGlobalScope(SoftDeletingScope::class);
+            $liquids->whereNotNull('deleted_at');
+        }
+
+        if (!empty($params['all-versions'])) {
+            $liquids->withoutGlobalScope('only-latest-version');
+        }
+
+        return $liquids->get();
     }
 }

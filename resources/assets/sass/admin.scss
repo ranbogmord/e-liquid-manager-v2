@@ -1,0 +1,68 @@
+@import "~datatables.net-dt/css/jquery.dataTables.css";
+@import "variables";
+@import "buttons";
+
+body {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100vh;
+}
+
+#main-header {
+  background-color: #1e272e;
+
+  #brand a,
+  a {
+    color: #fff;
+  }
+}
+
+
+#admin-section {
+  display: flex;
+  flex-flow: row nowrap;
+  flex: 1;
+
+  .navbar {
+    width: 250px;
+    padding: 20px;
+    border-right: 1px solid $border-color;
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        padding-bottom: 5px;
+        border-bottom: 1px solid $border-color;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .edit-area {
+    flex: 1;
+    padding: 20px;
+  }
+
+  .dataTables_wrapper {
+    margin-top: 20px;
+  }
+
+  .datatable {
+    th {
+      text-align: left;
+      padding-left: 10px;
+    }
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="submit"],
+  .boolean-checkbox-field,
+  select {
+    margin-bottom: 20px;
+  }
+}

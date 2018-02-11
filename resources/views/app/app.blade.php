@@ -41,6 +41,8 @@
 
             <action-row :liquid.sync="liquid"></action-row>
 
+            <version-select v-if="liquid.id" :liquid.sync="liquid"></version-select>
+
             <comments v-if="liquid.id" :liquid.sync="liquid"></comments>
 
             <concentrate-modal :is-open.sync="showConcentrateModal" :liquid="liquid"></concentrate-modal>
