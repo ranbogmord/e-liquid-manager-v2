@@ -1,0 +1,33 @@
+@import "variables";
+
+#messages {
+  .success {
+    padding: 20px;
+    background: $color-success;
+    color: #fff;
+  }
+
+  .error {
+    padding: 20px;
+    background: $color-danger;
+    color: #fff;
+  }
+
+  .info {
+    padding: 20px;
+    background: $color-info;
+    color: #fff;
+  }
+}
+
+form {
+  .form-errors {
+    ul {
+      list-style-type: none;
+      margin: 20px 0;
+      padding: 20px;
+      background-color: $color-danger;
+      color: #fff;
+    }
+  }
+}

@@ -46,6 +46,6 @@ class ProfileController extends Controller
         }
 
         session()->flash('message:success', 'Profile updated');
-        return redirect(route('profile:edit'));
+        return redirect(route('profile.edit'));
     }
 }

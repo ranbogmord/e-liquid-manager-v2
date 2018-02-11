@@ -15,20 +15,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('', 'AppController@app')->name('app');
-    Route::get('profile', 'ProfileController@edit')->name('profile:edit');
+    Route::get('profile', 'ProfileController@edit')->name('profile.edit');
     Route::post('profile', 'ProfileController@update')->name('profile:update');
 
     Route::group(['prefix' => 'ajax'], function () {
         Route::resource('flavours', 'FlavourController', [
-            'only' => ['index', 'show', 'store', 'update', 'delete']
+            'only' => ['index', 'show', 'store']
         ]);
 
         Route::resource('liquids', 'LiquidController', [
-            'only' => ['index', 'show', 'store', 'update', 'delete']
+            'only' => ['index', 'show', 'store', 'update', 'destroy']
         ]);
 
+        Route::get('liquids/{liquid}/comments', 'CommentController@index');
+        Route::post('liquids/{liquid}/comments', 'CommentController@store');
+        Route::delete('liquids/{liquid}/comments/{comment}', 'CommentController@destroy');
+
         Route::resource('vendors', 'VendorController', [
-            'only' => ['index', 'show', 'store', 'update', 'delete']
+            'only' => ['index', 'show']
         ]);
     });
 });

@@ -35,4 +35,7 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'analytics' => [
+        'key' => env('GA_KEY')
+    ]
 ];

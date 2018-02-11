@@ -1,0 +1,41 @@
+@import "variables";
+
+$types: (name: primary, color: $color-success), (name: danger, color: $color-danger), (name: info, color: $color-info);
+
+.btn {
+  padding: 10px;
+  color: $border-color;
+  background: #fff;
+  border: 1px solid $border-color;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+
+  transition-property: color, background-color;
+  transition-duration: 0.3s;
+
+  &:hover {
+    color: #fff;
+    background-color: $border-color;
+  }
+
+  &.expanded {
+    width: 100%;
+  }
+
+  @each $type in $types {
+    $name: map-get($type, "name");
+    $color: map-get($type, "color");
+
+    &.#{$name} {
+      color: #fff;
+      background-color: $color;
+      border-color: $color;
+
+      &:hover {
+        color: $color;
+        background-color: #fff;
+      }
+    }
+  }
+}

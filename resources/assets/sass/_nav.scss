@@ -1,0 +1,39 @@
+@import "variables";
+
+$header-height: 50px;
+
+#main-header {
+  display: flex;
+  flex-flow: row nowrap;
+  border-bottom: 1px solid $border-color;
+  padding: 0 20px;
+  height: $header-height;
+
+  #brand {
+    font-size: 24px;
+    a {
+      text-decoration: none;
+      color: #000000;
+      font-weight: bold;
+
+      height: $header-height;
+      line-height: $header-height;
+    }
+  }
+
+  #mobile-menu-toggle {
+    display: none;
+  }
+
+  #menu {
+    display: flex;
+    flex-flow: row nowrap;
+    list-style-type: none;
+    align-self: center;
+    margin-left: auto;
+
+    li {
+      margin-left: 20px;
+    }
+  }
+}

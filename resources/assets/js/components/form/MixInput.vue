@@ -1,5 +1,5 @@
 <template>
-    <div class="mix-container-input">
+    <div class="mix-input">
         <label>
             {{ label }}<br>
             <input :type="type" ref="input" :value="value" @input="updateValue" :step="step" :min="min" :max="max">

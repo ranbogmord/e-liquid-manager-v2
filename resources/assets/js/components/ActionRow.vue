@@ -1,7 +1,8 @@
 <template>
     <div id="action-row">
+        <a v-if="liquid.id" @click.prevent="archiveLiquid(liquid)" href="#" class="btn danger archive">Archive</a>
         <a href="#" class="btn primary" @click.prevent="saveLiquid(liquid)">Save</a>
-        <a href="#" class="btn primary" @click.prevent="cancelEdit()">Cancel</a>
+        <a href="#" class="btn danger" @click.prevent="cancelEdit()">Cancel</a>
     </div>
 </template>
 
@@ -16,6 +17,9 @@
         },
         cancelEdit() {
           bus.$emit('liquid:reset');
+        },
+        archiveLiquid(liquid) {
+          bus.$emit('liquid:archive', liquid);
         }
       }
     }

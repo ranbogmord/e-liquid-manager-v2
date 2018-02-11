@@ -8,9 +8,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>E-Liquid Manager</title>
 
+    <link rel="stylesheet" href="{{ asset('css/base.css') }}">
     @yield("styles")
+
+    @if(config('services.analytics.key'))
+        <script src="https://www.googletagmanager.com/gtag/js?id={{ config('services.analytics.key') }}" async></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments)};
+          gtag('js', new Date());
+
+          gtag('config', '{{ config('services.analytics.key') }}');
+        </script>
+    @endif
 </head>
 <body>
+    @if(auth()->check())
+        @include("partials.nav")
+    @endif
     @include("partials.messages")
 
     @yield("content")

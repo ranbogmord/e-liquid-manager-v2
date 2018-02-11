@@ -42,7 +42,7 @@ class FlavourController extends Controller
         $data = $this->validate($request, [
             'name' => 'required|min:2',
             'is_vg' => 'required|boolean',
-            'vendor_id' => 'required|exists:vendors,id',
+            'vendor_id' => 'nullable|exists:vendors,id',
         ]);
         $data['author_id'] = auth()->id();
 

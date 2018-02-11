@@ -37,6 +37,11 @@ class Liquid extends BaseModel
         return $this->belongsToMany(Flavour::class)->withPivot(['percent']);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
+    }
+
     public function jsonSerialize()
     {
         $data = parent::jsonSerialize();

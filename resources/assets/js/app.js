@@ -2,11 +2,15 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 const bus = require('./bus');
+const utils = require('./utils');
+const mixingCalculator = require('./mixing-calculator');
 
 const app = new Vue({
   el: '#app',
   data() {
     return {
+      appLoading: false,
+      showConcentrateModal: false,
       liquid: this.getEmptyLiquid()
     };
   },
@@ -24,11 +28,23 @@ const app = new Vue({
     });
 
     bus.$on('flavour:added', flavour => {
-      this.liquid.flavours.push(flavour);
+      app.liquid.flavours.push(flavour);
     });
 
     bus.$on('flavour:removed', idx => {
-      this.liquid.flavours.splice(idx, 1);
+      app.liquid.flavours.splice(idx, 1);
+    });
+
+    bus.$on('liquid:archive', liquid => {
+      this.deleteLiquid(liquid);
+    });
+
+    bus.$on('concentrate-modal:open', () => {
+      this.showConcentrateModal = true;
+    });
+
+    bus.$on('concentrate-modal:close', () => {
+      this.showConcentrateModal = false;
     });
   },
   methods: {
@@ -79,24 +95,58 @@ const app = new Vue({
         }
       })
       .catch(err => {
-        toastr.error("Failed to save liquid");
+        const res = err.response;
+
+        if (res && res.status === 400) {
+          toastr.error(utils.extractErrors(res.data).join("<br>"));
+        } else {
+          toastr.error("Failed to save liquid");
+        }
         console.error(new Error(err));
       })
+    },
+    deleteLiquid(liquid) {
+      axios.delete(`/ajax/liquids/${liquid.id}`)
+      .then(res => {
+        if (res.status === 204) {
+          toastr.success('Liquid archived');
+          this.liquid = this.getEmptyLiquid();
+          bus.$emit('liquid:archived');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        toastr.error("Failed to archive liquid");
+      });
+    },
+    removeFlavour(idx) {
+      bus.$emit('flavour:removed', idx);
     }
   },
   watch: {
     'liquid.base_pg_percentage'(val) {
       this.liquid.base_vg_percentage = 100 - (+val);
+      localStorage.setItem('preferred-base-pg', val);
     },
     'liquid.base_vg_percentage'(val) {
       this.liquid.base_pg_percentage = 100 - (+val);
     },
     'liquid.target_pg_percentage'(val) {
       this.liquid.target_vg_percentage = 100 - (+val);
+      localStorage.setItem('preferred-target-pg', val);
     },
     'liquid.target_vg_percentage'(val) {
       this.liquid.target_pg_percentage = 100 - (+val);
     },
+    'liquid.base_nic_strength'(val) {
+      localStorage.setItem('preferred-base-nic', val);
+    },
+    'liquid.batch_size'(val) {
+      localStorage.setItem('preferred-batch-size', val);
+    },
+    'liquid.target_nic_strength'(val) {
+      localStorage.setItem('preferred-nic-strength', val);
+    }
   },
   components: {
     'liquid-list': require('./components/LiquidList'),
@@ -106,5 +156,7 @@ const app = new Vue({
     'flavour-input': require('./components/FlavourInput'),
     'mix-table': require('./components/MixTable'),
     'action-row': require('./components/ActionRow'),
+    'comments': require('./components/Comments'),
+    'concentrate-modal': require('./components/ConcentrateModal')
   }
 });

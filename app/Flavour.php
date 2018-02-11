@@ -23,6 +23,7 @@ class Flavour extends BaseModel
     {
         $data = parent::toArray();
         $data['vendor'] = $this->vendor;
+        $data['percent'] = $this->base_percent;
 
         return $data;
     }

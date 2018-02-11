@@ -27,20 +27,30 @@
         };
       },
       mounted() {
-        axios.get('/ajax/liquids')
-        .then(res => {
-          if (res.status === 200) {
-            this.items = res.data;
-          }
+        this.getLiquids();
+
+        bus.$on('liquid:archived', () => {
+          this.getLiquids();
         })
-        .catch(err => {
-          toastr.error('Failed to load liquids');
-          console.error(new Error(err));
-        });
       },
       methods: {
         setLiquid(liquid) {
           bus.$emit('liquid:set', liquid);
+        },
+        getLiquids() {
+          this.loading = true;
+          axios.get('/ajax/liquids')
+          .then(res => {
+            this.loading = false;
+            if (res.status === 200) {
+              this.items = res.data;
+            }
+          })
+          .catch(err => {
+            this.loading = false;
+            toastr.error('Failed to load liquids');
+            console.error(new Error(err));
+          });
         }
       },
       computed: {
