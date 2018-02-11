@@ -7,7 +7,7 @@
         <li><a href="{{ route('profile.edit') }}">Profile</a></li>
         @if(auth()->user() && auth()->user()->role === "admin")
             <li>
-                <a href="#">Admin</a>
+                <a href="{{ route('admin.index') }}">Admin</a>
             </li>
         @endif
         <li><a href="/logout">Logout</a></li>

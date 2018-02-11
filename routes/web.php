@@ -43,6 +43,10 @@ Route::group(['middleware' => 'auth'], function () {
         'prefix' => 'admin'
     ], function () {
         Route::name('admin.')->group(function () {
+            Route::get('', function () {
+                return view('admin.index');
+            })->name('index');
+
             Route::resource('vendors', 'VendorController');
             Route::resource('flavours', 'FlavourController');
             Route::resource('users', 'UserController');
