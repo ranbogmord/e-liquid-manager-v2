@@ -145,6 +145,7 @@ body {
 
     @media(max-width: 1200px) {
       flex-flow: column nowrap;
+      margin-top: 20px;
     }
 
     .input-col {
@@ -255,6 +256,19 @@ body {
       &.archive {
         margin-right: auto;
         margin-left: 0;
+      }
+    }
+
+    @media (max-width: 500px) {
+      flex-flow: row wrap;
+
+      .btn {
+        margin: 0 0 10px;
+        width: 50%;
+
+        &.archive {
+          margin: 0 0 10px;
+        }
       }
     }
   }

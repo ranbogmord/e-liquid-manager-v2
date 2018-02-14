@@ -20,6 +20,10 @@ $header-height: 50px;
       height: $header-height;
       line-height: $header-height;
     }
+
+    @media (max-width: 600px) {
+      font-size: 20px;
+    }
   }
 
   #mobile-menu-toggle {
@@ -139,7 +143,9 @@ $header-height: 50px;
     }
   }
 
-  #mobile-menu-toggle.open + #menu {
-    display: block;
+  @media (max-width: 500px) {
+    #mobile-menu-toggle.open + #menu {
+      display: block;
+    }
   }
 }
