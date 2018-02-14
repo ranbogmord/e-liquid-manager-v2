@@ -34,7 +34,7 @@ $types: (name: primary, color: $color-success), (name: danger, color: $color-dan
 
       &:hover {
         color: $color;
-        background-color: #fff;
+        background-color: transparent;
       }
     }
   }

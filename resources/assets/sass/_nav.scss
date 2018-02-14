@@ -8,6 +8,7 @@ $header-height: 50px;
   border-bottom: 1px solid $border-color;
   padding: 0 20px;
   height: $header-height;
+  position: relative;
 
   #brand {
     font-size: 24px;
@@ -22,7 +23,82 @@ $header-height: 50px;
   }
 
   #mobile-menu-toggle {
+    $animation-duration: 0.3s;
+
     display: none;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 40px;
+    width: 40px;
+    background: #000;
+    transition: background $animation-duration;
+    overflow: hidden;
+
+    @media (max-width: 500px) {
+      display: block;
+    }
+
+    span {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      text-indent: 9999px;
+      background: #fff;
+
+      transition: background $animation-duration;
+
+      height: 2px;
+
+      left: 10px;
+      right: 10px;
+
+      &:before,
+      &:after {
+        content: '';
+        height: 2px;
+        background: #fff;
+        position: absolute;
+        width: 100%;
+        display: block;
+
+        transition-duration: $animation-duration;
+        transition-property: top, bottom, transform;
+        transition-delay: $animation-duration, $animation-duration, 0.3s;
+      }
+
+      &:before {
+        top: -6px;
+      }
+
+      &:after {
+        bottom: -6px;
+      }
+    }
+
+    &.open {
+      background: $color-danger;
+
+      span {
+        background: none;
+
+        &:before,
+        &:after {
+          transition-delay: $animation-duration, $animation-duration, 0.3s;
+        }
+
+        &:before {
+          top: 0;
+          transform: rotate(-45deg);
+        }
+
+        &:after{
+          bottom: 0;
+          transform: rotate(45deg);
+        }
+      }
+    }
   }
 
   #menu {
@@ -35,5 +111,35 @@ $header-height: 50px;
     li {
       margin-left: 20px;
     }
+
+    @media all and (max-width: 500px) {
+      position: fixed;
+      top: 50px;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: #fff;
+      border-bottom: 2px solid $border-color;
+      margin: 0;
+      padding: 0 20px 20px;
+      display: none;
+
+      li {
+        margin: 0;
+        display: block;
+        text-align: center;
+        border-bottom: 1px solid $border-color;
+        height: 40px;
+        line-height: 40px;
+
+        &:first-of-type {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+
+  #mobile-menu-toggle.open + #menu {
+    display: block;
   }
 }

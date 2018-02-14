@@ -1,0 +1,49 @@
+@import "variables";
+@import "messages";
+@import "forms";
+@import "buttons";
+
+body {
+  min-height: 100vh;
+  display: flex;
+  background-image: url('/img/login.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+#login-page {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  #login-form {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    width: 500px;
+    margin: 0 20px;
+  }
+
+  #reset-password,
+  #login-link {
+    display: inline-block;
+    margin-top: 20px;
+  }
+}
+
+#photo-credit {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: #fff;
+  opacity: 0.3;
+  transition: 0.3s linear opacity;
+
+  a {
+    color: inherit;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
