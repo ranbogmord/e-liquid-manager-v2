@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Jobs\RecalculateBasePercentJob;
 use App\Liquid;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,10 @@ class LiquidService
             $liquid->save();
 
             $liquid->flavours()->sync($flavours);
+
+            $liquid->flavours->each(function ($f) {
+                RecalculateBasePercentJob::dispatch($f);
+            });
         });
 
         return $liquid;
@@ -54,6 +59,10 @@ class LiquidService
             $liquid->save();
 
             $liquid->flavours()->sync($flavours);
+
+            $liquid->flavours->each(function ($f) {
+                RecalculateBasePercentJob::dispatch($f);
+            });
         });
 
         return $liquid;
