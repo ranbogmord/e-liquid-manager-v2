@@ -15,8 +15,8 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql mbstring tokenizer
 
 EXPOSE 8000
 
-ADD ./ /code
 ADD ./entrypoint.sh /entrypoint.sh
+ADD ./ /code
 
 WORKDIR /code
 
