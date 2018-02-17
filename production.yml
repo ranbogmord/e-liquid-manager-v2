@@ -2,8 +2,7 @@ version: "2"
 services:
   redis:
     image: redis
-
   app:
-    build: .
+    image: ranbogmord/elm
     ports:
       - "8000:8000"
