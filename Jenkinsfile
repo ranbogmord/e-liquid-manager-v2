@@ -6,7 +6,7 @@ node {
     }
 
     stage("Install dependencies") {
-        sh "composer install"
+        sh "composer install --ignore-platform-reqs"
         sh "npm install"
         sh "npm run dev"
     }
