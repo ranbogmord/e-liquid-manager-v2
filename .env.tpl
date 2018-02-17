@@ -23,10 +23,10 @@ REDIS_PASSWORD=null
 REDIS_PORT=6379
 
 MAIL_DRIVER=smtp
-MAIL_HOST={{ key "elm/mail-host" }}
-MAIL_PORT={{ key "elm/mail-port" }}
-MAIL_USERNAME={{ key "elm/mail-user" }}
-MAIL_PASSWORD={{ key "elm/mail-pass" }}
+MAIL_HOST={{ keyOrDefault "elm/mail-host" "null" }}
+MAIL_PORT={{ keyOrDefault "elm/mail-port" "null" }}
+MAIL_USERNAME={{ keyOrDefault "elm/mail-user" "null" }}
+MAIL_PASSWORD={{ keyOrDefault "elm/mail-pass" "null" }}
 MAIL_ENCRYPTION=null
 
 PUSHER_APP_ID=
@@ -34,4 +34,4 @@ PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 PUSHER_APP_CLUSTER=mt1
 
-GA_KEY="{{ key "elm/ga-key" }}"
+GA_KEY="{{ keyOrDefault "elm/ga-key", "null" }}"
