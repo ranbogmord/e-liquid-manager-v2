@@ -13,18 +13,18 @@ RUN apt-get update && apt-get install -y curl unzip \
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql mbstring tokenizer
 
-RUN cd /tmp \
-    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php \
-    && chmod +x composer.phar \
-    && mv composer.phar /usr/local/bin/composer \
-    && cd -
+#RUN cd /tmp \
+#    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+#    && php composer-setup.php \
+#    && chmod +x composer.phar \
+#    && mv composer.phar /usr/local/bin/composer \
+#    && cd -
 
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash \
-    && . $HOME/.bashrc \
-    && nvm install 9.5.0 \
-    && ln -s $HOME/.nvm/versions/node/v9.5.0/bin/node /usr/local/bin/node \
-    && ln -s $HOME/.nvm/versions/node/v9.5.0/bin/npm /usr/local/bin/npm
+#RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash \
+#    && . $HOME/.bashrc \
+#    && nvm install 9.5.0 \
+#    && ln -s $HOME/.nvm/versions/node/v9.5.0/bin/node /usr/local/bin/node \
+#    && ln -s $HOME/.nvm/versions/node/v9.5.0/bin/npm /usr/local/bin/npm
 
 EXPOSE 8000
 
@@ -32,6 +32,6 @@ ADD ./ /code
 
 WORKDIR /code
 
-RUN cd /code && composer install && npm install && npm run dev
+#RUN cd /code && composer install && npm install && npm run dev
 
 CMD ["bash", "/code/entrypoint.sh"]

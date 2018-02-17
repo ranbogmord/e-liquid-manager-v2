@@ -4,13 +4,13 @@ node {
     stage("Clone repo") {
         checkout scm
     }
-/*
+
     stage("Install dependencies") {
         sh "composer install"
         sh "npm install"
         sh "npm run dev"
     }
-*/
+
     stage("Build image") {
         app = docker.build("ranbogmord/elm")
     }
