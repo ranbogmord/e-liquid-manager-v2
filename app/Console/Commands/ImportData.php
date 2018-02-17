@@ -9,6 +9,7 @@ use App\User;
 use App\Vendor;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Database\DatabaseManager;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
@@ -38,29 +39,25 @@ class ImportData extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * ID is mapped by ["field"]["$oid"], usually _id
-     * Dates are mapped by ["fieldName"]["$date"]
-     *
-     * @return mixed
-     */
-    public function handle()
+    public function progressLog($str, $progress, $total, $step = 100)
     {
-        $filePath = $this->argument('file');
-
-        if (!file_exists($filePath)) {
-            $this->error('Invalid file');
+        $progress += 1;
+        if ($progress % $step === 0) {
+            $this->info(
+                sprintf($str, $progress, $total)
+            );
         }
+    }
 
-        $json = file_get_contents($filePath);
-        $data = json_decode($json, true);
-
+    public function runImport($data)
+    {
         if (!empty($data['users'])) {
+            $this->info("Importing users");
             //DB::table('users')->delete();
 
-            foreach ($data['users'] as $oldUser) {
+            foreach ($data['users'] as $k => $oldUser) {
+                $this->progressLog("User %d / %d", $k, count($data['users']), 10);
+
                 $user = new User();
                 $user->old_id = $oldUser['_id']['$oid'];
                 $user->username = $oldUser['username'];
@@ -79,7 +76,10 @@ class ImportData extends Command
         }
 
         if (!empty($data['vendors'])) {
-            foreach ($data['vendors'] as $oldVendor) {
+            $this->info("Importing vendors");
+            foreach ($data['vendors'] as $k => $oldVendor) {
+                $this->progressLog("Vendor %d / %d", $k, count($data['vendors']), 10);
+
                 $vendor = new Vendor();
                 $vendor->old_id = $oldVendor['_id']['$oid'];
                 $vendor->name = $oldVendor['name'];
@@ -87,7 +87,8 @@ class ImportData extends Command
                 $vendor->created_at = new Carbon($oldVendor['createdAt']['$date'] ?? null);
                 $vendor->updated_at = new Carbon($oldVendor['updatedAt']['$date'] ?? null);
 
-                if ($user = User::whereOldId($oldVendor['addedBy']['$oid'])->first()) {
+                $uid = $oldVendor['addedBy']['$oid'] ?? null;
+                if ($uid && $user = User::whereOldId($uid)->first()) {
                     $vendor->author_id = $user->id;
                 }
 
@@ -96,18 +97,23 @@ class ImportData extends Command
         }
 
         if (!empty($data['flavours'])) {
-            foreach ($data['flavours'] as $oldFlavour) {
+            $this->info("Importing flavours");
+            foreach ($data['flavours'] as $k => $oldFlavour) {
+                $this->progressLog("Flavour %d / %d", $k, count($data['flavours']), 10);
+
                 $flavour = new Flavour();
                 $flavour->old_id = $oldFlavour['_id']['$oid'];
                 $flavour->name = $oldFlavour['name'];
                 $flavour->is_vg = $oldFlavour['isVg'];
                 $flavour->base_percent = $oldFlavour['basePercent'];
 
-                if ($vendor = Vendor::whereOldId($oldFlavour['vendor']['$oid'])->first()) {
+                $vid = $oldFlavour['vendor']['$oid'] ?? null;
+                if ($vid && $vendor = Vendor::whereOldId($vid)->first()) {
                     $flavour->vendor_id = $vendor->id;
                 }
 
-                if ($user = User::whereOldId($oldFlavour['addedBy']['$oid'])->first()) {
+                $uid = $oldFlavour['addedBy']['$oid'] ?? null;
+                if ($uid && $user = User::whereOldId($uid)->first()) {
                     $flavour->author_id = $user->id;
                 }
 
@@ -119,7 +125,10 @@ class ImportData extends Command
         }
 
         if (!empty($data['liquids'])) {
-            foreach ($data['liquids'] as $oldLiquid) {
+            $this->info("Importing liquids");
+            foreach ($data['liquids'] as $k => $oldLiquid) {
+                $this->progressLog("Liquid %d / %d", $k, count($data['liquids']), 10);
+
                 $liquid = new Liquid();
                 $liquid->old_id = $oldLiquid['_id']['$oid'];
 
@@ -129,7 +138,8 @@ class ImportData extends Command
                 $liquid->target_vg_percentage = $oldLiquid['target']['vgPercent'];
                 $liquid->target_nic_strength = $oldLiquid['target']['nicStrength'];
 
-                if ($user = User::whereOldId($oldLiquid['author']['$oid'])->first()) {
+                $uid = $oldLiquid['author']['$oid'] ?? null;
+                if ($uid && $user = User::whereOldId($uid)->first()) {
                     $liquid->author_id = $user->id;
                 }
 
@@ -140,7 +150,8 @@ class ImportData extends Command
 
                 $flavours = [];
                 foreach ($oldLiquid['flavours'] as $oldFlavourRef) {
-                    if ($flavour = Flavour::whereOldId($oldFlavourRef['flavour']['_id'])->first()) {
+                    $fid = $oldFlavourRef['flavour']['$oid'] ?? null;
+                    if ($fid && $flavour = Flavour::whereOldId($fid)->first()) {
                         $flavours[$flavour->id] = [
                             'percent' => $oldFlavourRef['perc']
                         ];
@@ -152,7 +163,10 @@ class ImportData extends Command
         }
 
         if (!empty($data['comments'])) {
-            foreach ($data['comments'] as $oldComment) {
+            $this->info("Importing comments");
+            foreach ($data['comments'] as $k => $oldComment) {
+                $this->progressLog("Comment %d / %d", $k, count($data['comments']), 10);
+
                 $comment = new Comment();
                 $comment->old_id = $oldComment['_id']['$oid'];
 
@@ -162,15 +176,85 @@ class ImportData extends Command
                     $comment->author_id = $user->id;
                 }
 
-                if ($liquid = Liquid::whereOldId($oldComment['liquid']['$oid'])->first()) {
+                if ($liquid = Liquid::withoutGlobalScopes()->whereOldId($oldComment['liquid']['$oid'])->first()) {
                     $comment->liquid_id = $liquid->id;
                 }
 
-                $comment->created_at = $oldComment['createdAt']['$date'];
-                $comment->updated_at = $oldComment['updatedAt']['$date'];
+                $comment->created_at = new Carbon($oldComment['createdAt']['$date'] ?? null);
+                $comment->updated_at = new Carbon($oldComment['updatedAt']['$date'] ?? null);
 
                 $comment->save();
             }
         }
+
+        if (!empty($data['liquids'])) {
+            $this->info("Mapping next versions");
+
+            foreach ($data['liquids'] as $liquid) {
+                if (!empty($liquid['next_version']['$oid'])) {
+                    $this->info(
+                        sprintf("Liquid %s has a new version %s", $liquid['_id']['$oid'], $liquid['next_version']['$oid'])
+                    );
+
+                    /** @var Liquid $nextVersion */
+                    $nextVersion = Liquid::withoutGlobalScopes()->whereOldId($liquid['next_version']['$oid'])->first();
+
+                    /** @var Liquid $oldVersion */
+                    $oldVersion = Liquid::withoutGlobalScopes()->whereOldId($liquid['_id']['$oid'])->first();
+                    if ($nextVersion && $oldVersion) {
+                        $oldVersion->next_version_id = $nextVersion->id;
+                        $oldVersion->save();
+                    } else {
+                        if (!$oldVersion) {
+                            $this->error("Unable to find old version");
+                        }
+                        if (!$nextVersion) {
+                            $this->error("Unable to find next version");
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * ID is mapped by ["field"]["$oid"], usually _id
+     * Dates are mapped by ["fieldName"]["$date"]
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function handle()
+    {
+        $filePath = $this->argument('file');
+
+        if (!file_exists($filePath)) {
+            $this->error('Invalid file');
+            exit(1);
+        }
+
+        $json = file_get_contents($filePath);
+        $data = json_decode($json, true);
+
+        if (json_last_error()) {
+            $this->error(json_last_error_msg());
+            exit(1);
+        }
+
+        /** @var DatabaseManager $db */
+        $db = app('db');
+        $db->beginTransaction();
+
+        try {
+            $this->runImport($data);
+        } catch (\Exception $ex) {
+            $db->rollBack();
+            throw $ex;
+        }
+
+        $db->commit();
     }
 }

@@ -20,7 +20,7 @@ class CreateCommentsTable extends Migration
             $table->text("comment");
 
             $table->integer("author_id");
-            $table->integer("liquid_id");
+            $table->integer("liquid_id")->nullable();
 
             $table->softDeletes();
             $table->timestamps();
