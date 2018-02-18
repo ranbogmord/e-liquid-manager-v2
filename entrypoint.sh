@@ -2,8 +2,14 @@
 
 if [[ "$CONSUL_NODE_IP" ]]; then
     echo "Joining Consul Cluster $CONSUL_NODE_IP"
+    nohup consul agent \
+        -join="$CONSUL_NODE_IP" \
+        -config-dir=/consul/config \
+        -data-dir=/consul/data &
+
+    sleep 5
+
     nohup consul-template \
-        -consul-addr "$CONSUL_NODE_IP" \
         -template "/code/.env.tpl:/code/.env" &
 fi
 

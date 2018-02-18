@@ -13,9 +13,12 @@ RUN apt-get update && apt-get install -y curl unzip \
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql mbstring tokenizer
 
+RUN mkdir -p /consul/{config,data}
+
 EXPOSE 8000
 
 ADD ./entrypoint.sh /entrypoint.sh
+ADD ./consul /consul/config
 ADD ./ /code
 
 WORKDIR /code

@@ -1,0 +1,8 @@
+{
+  "service": {
+    "name": "elm",
+    "tags": ["elm-app"],
+    "port": 8000,
+    "enable_tag_override": false
+  }
+}
