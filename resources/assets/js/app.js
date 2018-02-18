@@ -77,6 +77,7 @@ const app = new Vue({
       return localStorage.getItem(key) || defaultVal;
     },
     saveLiquid(liquid) {
+      this.appLoading = true;
       liquid = JSON.parse(JSON.stringify(liquid));
       liquid.flavours = liquid.flavours.map(f => {
         return {
@@ -97,9 +98,11 @@ const app = new Vue({
           toastr.success("Liquid saved");
           bus.$emit('liquid:reset');
           bus.$emit('liquid:created');
+          this.appLoading = false;
         }
       })
       .catch(err => {
+        this.appLoading = false;
         const res = err.response;
 
         if (res && res.status === 400) {
