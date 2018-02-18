@@ -13,10 +13,10 @@ DB_USERNAME={{ key "elm/db-user" }}
 DB_PASSWORD={{ key "elm/db-pass" }}
 
 BROADCAST_DRIVER=log
-CACHE_DRIVER=file
-SESSION_DRIVER=file
+CACHE_DRIVER={{ keyOrDefault "elm/cache-driver" "file" }}
+SESSION_DRIVER={{ keyOrDefault "elm/session-driver" "file" }}
 SESSION_LIFETIME=120
-QUEUE_DRIVER=sync
+QUEUE_DRIVER={{ keyOrDefault "elm/queue-driver" "sync" }}
 
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
