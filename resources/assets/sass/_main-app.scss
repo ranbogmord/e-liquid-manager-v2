@@ -15,16 +15,21 @@ body {
   flex-flow: row nowrap;
 
   .sidebar-list {
-    width: 250px;
+    width: 280px;
     padding: 20px;
     background-color: #fff;
-    position: relative;
+    position: sticky;
+    top: 0px;
     z-index: 999;
+    display: flex;
+    flex-flow: column nowrap;
+    max-height: calc(100vh - 50px);
 
     @media (max-width: 1024px) {
       position: fixed;
       top: 0;
       height: 100vh;
+      max-height: 100vh;
     }
 
     .search-field {
@@ -38,6 +43,9 @@ body {
       list-style-type: none;
       margin: 20px 0;
       padding: 0;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
 
       li {
         border-bottom: 1px solid $border-color;
