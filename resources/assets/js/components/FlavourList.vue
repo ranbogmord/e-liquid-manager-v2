@@ -10,7 +10,7 @@
             </li>
         </ul>
 
-        <a v-if="!showCreateFlavourForm" href="#" class="btn primary expanded" @click="showCreateFlavourForm = true">Add flavour</a>
+        <a v-if="!showCreateFlavourForm" href="#" class="btn primary expanded" @click.prevent="showCreateFlavourForm = true">Add flavour</a>
         <div id="add-flavour" v-if="showCreateFlavourForm">
             <h3>Add flavour</h3>
             <mix-input
