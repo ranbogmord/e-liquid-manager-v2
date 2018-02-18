@@ -18,9 +18,9 @@ SESSION_DRIVER={{ keyOrDefault "elm/session-driver" "file" }}
 SESSION_LIFETIME=120
 QUEUE_DRIVER={{ keyOrDefault "elm/queue-driver" "sync" }}
 
-REDIS_HOST=127.0.0.1
+REDIS_HOST={{ keyOrDefault "elm/redis-host" "127.0.0.1" }}
 REDIS_PASSWORD=null
-REDIS_PORT=6379
+REDIS_PORT={{ keyOrDefault "elm/redis-port" "6379" }}
 
 MAIL_DRIVER=smtp
 MAIL_HOST={{ keyOrDefault "elm/mail-host" "null" }}
