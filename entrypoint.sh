@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+trap "pkill consul-template consul; exit;" 1 2 3 15
+
 if [[ "$CONSUL_NODE_IP" ]]; then
     echo "Joining Consul Cluster $CONSUL_NODE_IP"
     nohup consul agent \
