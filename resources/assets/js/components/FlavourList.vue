@@ -5,7 +5,7 @@
             <input type="text" placeholder="Search" v-model="searchString">
         </div>
         <ul>
-            <li v-for="item in sorted" @click.prevent="addFlavour(item)">
+            <li v-for="item in filtered" @click.prevent="addFlavour(item)">
                 {{ item.name }} {{ (item.vendor || {}).abbr }}
             </li>
         </ul>
@@ -134,17 +134,6 @@
       }
     },
     computed: {
-      sorted() {
-        return this.filtered.sort((a, b) => {
-          if (a > b) {
-            return 1;
-          } else if (a < b) {
-            return -1;
-          } else {
-            return 0;
-          }
-        });
-      },
       filtered() {
         if (!this.searchString) {
           return this.items || [];

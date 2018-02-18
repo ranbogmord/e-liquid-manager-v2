@@ -23,7 +23,7 @@ class FlavourController extends Controller
      */
     public function index()
     {
-        return response()->json(Flavour::all());
+        return response()->json(Flavour::orderBy('name', 'asc')->get());
     }
 
     /**
