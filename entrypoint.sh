@@ -2,7 +2,7 @@
 
 if [[ "$CONSUL_NODE_IP" ]]; then
     echo "Joining Consul Cluster $CONSUL_NODE_IP"
-    consul-template \
+    nohup consul-template \
         -consul-addr "$CONSUL_NODE_IP" \
         -template "/code/.env.tpl:/code/.env" &
 fi

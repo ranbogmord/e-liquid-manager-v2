@@ -34,4 +34,4 @@ PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 PUSHER_APP_CLUSTER=mt1
 
-GA_KEY="{{ keyOrDefault "elm/ga-key", "null" }}"
+GA_KEY={{ keyOrDefault "elm/ga-key" "null" }}
