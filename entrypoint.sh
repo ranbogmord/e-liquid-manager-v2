@@ -4,7 +4,7 @@ if [[ "$CONSUL_NODE_IP" ]]; then
     echo "Joining Consul Cluster $CONSUL_NODE_IP"
 
     consul-template \
-        -consul-addr="$CONSUL_NODE_IP:${CONSUL_NODE_PORT:-8500}"
+        -consul-addr="$CONSUL_NODE_IP:${CONSUL_NODE_PORT:-8500}" \
         -template "/code/.env.tpl:/code/.env" &
 fi
 
