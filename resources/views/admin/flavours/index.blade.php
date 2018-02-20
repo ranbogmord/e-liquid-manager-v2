@@ -24,7 +24,7 @@
                         <a href="{{ route('admin.flavours.edit', $item->id) }}">{{ $item->id }}</a>
                     </td>
                     <td>
-                        <a href="{{ route('admin.flavours.edit', $item->id) }}">{{ $item->name }}</a>
+                        <a href="{{ route('admin.flavours.edit', $item->id) }}">{{ $item->name }} ({{ array_get($item, 'vendor.abbr', 'Other') }})</a>
                     </td>
                     <td>
                         <a href="{{ route('admin.flavours.edit', $item->id) }}">{{ array_get($item, 'vendor.name', 'Other') }}</a>
