@@ -27,10 +27,10 @@
                     Total
                 </th>
                 <th>
-                    {{ total_ml }} / {{ total_flavour_ml }}
+                    {{ total_ml | rounded }} / {{ total_flavour_ml | rounded }}
                 </th>
                 <th>
-                    {{ total_percent }} / {{ total_flavour_percent }}
+                    {{ total_percent | rounded }} / {{ total_flavour_percent | rounded }}
                 </th>
             </tr>
         </table>
