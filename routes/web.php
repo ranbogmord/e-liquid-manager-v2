@@ -50,6 +50,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::resource('vendors', 'VendorController');
             Route::resource('flavours', 'FlavourController');
             Route::resource('users', 'UserController');
+
+            Route::get('statistics/flavours', 'StatisticsController@flavourStats')
+                ->name('stats.flavours');
+            Route::get('statistics/liquids-per-day', 'StatisticsController@liquidsPerDay')
+                ->name('stats.liquids-per-day');
         });
     });
 });

@@ -5,8 +5,8 @@
     "/css/admin.css": "/css/admin.css",
     "/css/profile.css": "/css/profile.css",
     "/css/base.css": "/css/base.css",
-    "/js/ui.js": "/js/ui.js",
     "/js/admin.js": "/js/admin.js",
+    "/js/ui.js": "/js/ui.js",
     "/img/loader.svg": "/img/loader.svg",
     "/img/login.jpg": "/img/login.jpg"
 }
