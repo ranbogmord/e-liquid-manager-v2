@@ -27,8 +27,8 @@ MAIL_HOST={{ keyOrDefault "elm/mail-host" "null" }}
 MAIL_PORT={{ keyOrDefault "elm/mail-port" "null" }}
 MAIL_USERNAME={{ keyOrDefault "elm/mail-user" "null" }}
 MAIL_PASSWORD={{ keyOrDefault "elm/mail-pass" "null" }}
-MAIL_FROM_ADDRESS={{ keyOrDefault "elm/mail-from-address" "null" }}
-MAIL_FROM_NAME={{ keyOrDefault "elm/mail-from-name" "null" }}
+MAIL_FROM_ADDRESS="{{ keyOrDefault "elm/mail-from-address" "" }}"
+MAIL_FROM_NAME="{{ keyOrDefault "elm/mail-from-name" "null" }}"
 MAIL_ENCRYPTION=null
 
 PUSHER_APP_ID=
