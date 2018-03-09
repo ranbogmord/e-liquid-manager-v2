@@ -51,6 +51,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::resource('flavours', 'FlavourController');
             Route::resource('users', 'UserController');
 
+            Route::post('flavours/merge', 'FlavourController@merge')->name('flavours.merge');
+
             Route::get('statistics/flavours', 'StatisticsController@flavourStats')
                 ->name('stats.flavours');
             Route::get('statistics/liquids-per-day', 'StatisticsController@liquidsPerDay')

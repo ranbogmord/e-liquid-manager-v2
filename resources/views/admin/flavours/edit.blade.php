@@ -26,9 +26,27 @@
                 ])
             </form>
 
+            <div class="merge-form">
+                <h2>Merge</h2>
+                <p>Merge this flavour into:</p>
+                <form method="post" action="{{ route('admin.flavours.merge') }}">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="from" value="{{ $flavour->id }}">
+                    @include("partials.form.select", [
+                        'label' => 'Flavour',
+                        'name' => 'to',
+                        'options' => $flavours,
+                        'value' => old('to'),
+                        'default' => 'Select'
+                    ])
+
+                    <input type="submit" class="btn primary" value="Merge">
+                </form>
+            </div>
+
             <div class="delete-form">
                 <h2>Delete</h2>
-                <form action="{{ route('admin.vendors.destroy', $flavour->id) }}" method="post">
+                <form action="{{ route('admin.flavours.destroy', $flavour->id) }}" method="post">
                     {{ csrf_field() }}
                     {{ method_field("DELETE") }}
 

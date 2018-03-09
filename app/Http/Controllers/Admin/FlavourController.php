@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Flavour;
 use App\Services\FlavourService;
 use App\Vendor;
+use function foo\func;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -87,8 +88,21 @@ class FlavourController extends Controller
             ];
         })->toArray();
 
+        $flavours = Flavour::where('id', '!=', $flavour->id)->orderBy('name', 'asc')->get()->map(function ($f) {
+            $name = $f->name;
+
+            if ($f->vendor) {
+                $name .= ' (' . $f->vendor->abbr . ')';
+            }
+            return [
+                'label' => $name,
+                'value' => $f->id
+            ];
+        })->toArray();
+
         return view('admin.flavours.edit', [
             'flavour' => $flavour,
+            'flavours' => $flavours,
             'vendors' => $vendors
         ]);
     }
@@ -126,5 +140,27 @@ class FlavourController extends Controller
 
         session()->flash('message:success', 'Flavour deleted');
         return redirect(route('admin.flavours.index'));
+    }
+
+    public function merge(Request $request)
+    {
+        $data = $this->validate($request, [
+            'from' => 'required|exists:flavours,id',
+            'to' => 'required|exists:flavours,id'
+        ]);
+
+        $from = Flavour::find($data['from']);
+        $to = Flavour::find($data['to']);
+
+        $result = $this->flavourService->mergeFlavours($from, $to);
+
+        if (!$result) {
+            return redirect()->back()->withErrors([
+                'error' => 'Failed to merge'
+            ])->withInput($data);
+        }
+
+        session()->flash('message:success', 'Flavours merged');
+        return redirect()->route('admin.flavours.edit', [$to->id]);
     }
 }
