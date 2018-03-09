@@ -5,7 +5,8 @@ const c3 = require('c3');
 
 !function () {
   $('.datatable').DataTable({
-    "lengthMenu": [[10, 25, 100, -1], [10, 25, 100, 'All']]
+    "lengthMenu": [[10, 25, 100, -1], [10, 25, 100, 'All']],
+    stateSave: true
   });
 
   $(document).on('click', '#mobile-menu-toggle', function (e) {
