@@ -21,4 +21,17 @@ node {
             app.push("latest")
         }
     }
+
+    stage("Deploy") {
+        when {
+          expression {
+            currentBuild.result == null || currentBuild.result == 'SUCCESS'
+          }
+        }
+        steps {
+            withCredentials([sshUserPrivateKey(credentialsId: 'docker-host-ssh', keyFileVariable: 'SSH_KEY_PATH', passphraseVariable: '', usernameVariable: 'SSH_USERNAME')]) {
+                sh "ssh -i $SSH_KEY_PATH $SSH_USERNAME@docker-host.ranbogmord.com 'cd elm && docker-compose pull app && docker-compose up -d app'"
+            }
+        }
+    }
 }
