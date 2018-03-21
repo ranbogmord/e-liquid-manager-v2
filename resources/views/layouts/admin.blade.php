@@ -36,7 +36,17 @@
     </div>
 </main>
 
-
+@if(config("sentry.dsn"))
+    <script src="https://cdn.ravenjs.com/3.23.3/raven.min.js" crossorigin="anonymous"></script>
+    @if(auth()->user())
+        <script>
+          Raven.setUserContext({
+            email: '{{ auth()->user()->email }}',
+            id: '{{ auth()->id() }}'
+          })
+        </script>
+    @endif
+@endif
 <script src="{{ asset('js/admin.js') }}"></script>
 @yield("scripts")
 </body>
