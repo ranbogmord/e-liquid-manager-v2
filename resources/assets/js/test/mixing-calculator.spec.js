@@ -4,6 +4,24 @@ const mc = new MixingCalculator();
 
 describe('MixingCalculator', function () {
   describe('Weight', function () {
+    describe('Bases', function () {
+      it('1ml of pure PG should weigh 1.038g/ml', function () {
+        let w = mc.calculatePgWeight(1);
+        assert.equal(w, 1.038);
+      });
+      it('1ml of pure VG should weigh 1.26g/ml', function () {
+        let w = mc.calculateVgWeight(1);
+        assert.equal(w, 1.26);
+      });
+      it('1ml of flavour should weigh 1g/ml by default', function () {
+        let w = mc.calculateFlavourWeight(1);
+        assert.equal(w, 1);
+      });
+      it('1ml of flavour with specified gravity of 0.5g/ml should weigh 0.5g/ml', function () {
+        let w = mc.calculateFlavourWeight(1, 0.5);
+        assert.equal(w, 0.5);
+      });
+    });
     describe('PG Nicotine', function () {
       /*
         Weight of 100mg in PG: 1.035 grams per ml
