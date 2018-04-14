@@ -29,8 +29,10 @@
                 ])
             </form>
 
-            <a id="reset-password" href="{{ route('password.request') }}">Forgot password?</a> <br>
-            <a id="register" href="{{ route('register') }}">New user? Register.</a>
+            <a id="reset-password" href="{{ route('password.request') }}">Forgot password?</a>
+            @if(config('app.registration_enabled'))
+                <br><a id="register" href="{{ route('register') }}">New user? Register.</a>
+            @endif
         </div>
     </div>
 

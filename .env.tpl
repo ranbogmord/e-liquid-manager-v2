@@ -39,3 +39,4 @@ PUSHER_APP_CLUSTER=mt1
 SENTRY_DSN={{ keyOrDefault "elm/sentry-dsn" "" }}
 
 GA_KEY={{ keyOrDefault "elm/ga-key" "null" }}
+REGISTRATION_ENABLED={{ keyOrDefault "elm/registration-enabled" "false" }}
