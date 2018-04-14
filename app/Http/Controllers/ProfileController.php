@@ -18,13 +18,16 @@ class ProfileController extends Controller
     function update(Request $request)
     {
         $data = $this->validate($request, [
-            'name' => 'required',
+            'name' => 'nullable|string',
             'username' => [
                 'required',
                 Rule::unique('users', 'username')->whereNot('id', auth()->id())
             ],
             'password' => 'nullable|min:6',
-            'email' => 'required|email'
+            'email' => [
+                'required',
+                Rule::unique('users', 'email')->whereNot('id', auth()->id())
+            ]
         ]);
 
         /** @var User $user */
