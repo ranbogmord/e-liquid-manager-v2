@@ -30,13 +30,11 @@
             </form>
 
             <a id="reset-password" href="{{ route('password.request') }}">Forgot password?</a>
+            @if(config('app.registration_enabled'))
+                <br><a id="register" href="{{ route('register') }}">New user? Register.</a>
+            @endif
         </div>
     </div>
 
-    <div id="photo-credit">
-        Photo by
-        <a href="https://unsplash.com/photos/YAjsL1KrbNo?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Thomas Bjornstad</a>
-        on
-        <a href="https://unsplash.com/search/photos/vape?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
-    </div>
+    @include("partials.photo-credit")
 @endsection

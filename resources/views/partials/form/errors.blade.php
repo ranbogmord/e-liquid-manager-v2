@@ -1,7 +1,9 @@
 <div class="form-errors">
     <ul>
-        <li>
-            {{ implode('</li><li>', $errors) }}
-        </li>
+        @foreach ($errors as $error)
+            <li>
+                {{ $error }}
+            </li>
+        @endforeach
     </ul>
 </div>

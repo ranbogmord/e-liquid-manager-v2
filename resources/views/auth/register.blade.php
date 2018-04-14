@@ -1,77 +1,46 @@
 @extends('layouts.app')
 
+@section("styles")
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+@append
+
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+    <div id="login-page">
+        <div id="login-form">
+            <h1>E-Liquid Manager</h1>
+            <form action="{{ route('register') }}" method="post">
+                @if($errors->any())
+                    @include('partials.form.errors', [
+                        'errors' => $errors->all()
+                    ])
+                @endif
+                {{ csrf_field() }}
+                @include("partials.form.input", [
+                    'label' => 'Username',
+                    'value' => old('username')
+                ])
+                @include("partials.form.input", [
+                    'label' => 'Email',
+                    'value' => old('email')
+                ])
+                @include("partials.form.input", [
+                    'label' => 'Password',
+                    'type' => 'password'
+                ])
+                @include("partials.form.input", [
+                    'label' => 'Password again',
+                    'type' => 'password',
+                    'name' => 'password_confirmation'
+                ])
+                @include("partials.form.submit", [
+                    'text' => 'Register',
+                    'class' => 'btn primary'
+                ])
+            </form>
 
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('register') }}">
-                        {{ csrf_field() }}
-
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <a id="reset-password" href="{{ route('login') }}">Have an account? Log in.</a>
         </div>
     </div>
-</div>
+
+    @include("partials.photo-credit")
 @endsection
